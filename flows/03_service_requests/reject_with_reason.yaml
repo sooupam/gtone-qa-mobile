@@ -1,0 +1,31 @@
+## Flow — SR Reject with Reason
+## Tests: abrir SR → rejeitar com motivo → status atualiza
+## Tags: regression, sr
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - sr
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Solicitacoes"
+- tapOn:
+    id: "sr-card"
+    index: 0
+
+- tapOn:
+    id: "btn-sr-reject"
+- tapOn:
+    id: "input-reject-reason"
+- inputText: "Duplicada de SR-1234"
+- hideKeyboard
+- tapOn:
+    id: "btn-confirm"
+
+- extendedWaitUntil:
+    visible: "Rejeitada"
+    timeout: 10000

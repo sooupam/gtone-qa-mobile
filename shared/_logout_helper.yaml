@@ -1,0 +1,19 @@
+## Subflow — Logout via menu "Mais"
+## Pre-req: usuario logado
+appId: net.globalthings.gtone
+---
+- tapOn:
+    text: "Mais"
+- tapOn:
+    id: "btn-logout"
+- tapOn:
+    id: "btn-logout-confirm"
+    optional: true
+- tapOn:
+    text: "Confirmar|Sair"
+    optional: true
+
+- extendedWaitUntil:
+    visible:
+      id: "input-email"
+    timeout: 30000

@@ -1,0 +1,41 @@
+## Flow — Meter Reading Out of Range Warning
+## Tests: leitura fora de faixa → warning amarelo
+## Tags: regression, meter, warning
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - meter
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Leituras"
+
+- tapOn:
+    id: "btn-new-meter-reading"
+- tapOn:
+    id: "input-meter-asset"
+- tapOn:
+    id: "asset-item"
+    index: 0
+
+- tapOn:
+    id: "input-meter-value"
+- inputText: "999999"
+- hideKeyboard
+
+- tapOn:
+    id: "btn-meter-submit"
+
+- extendedWaitUntil:
+    visible: ".*(fora de faixa|out of range|Aviso).*"
+    timeout: 8000
+
+- tapOn:
+    text: "Continuar|Confirmar"
+- assertVisible: "Leitura registrada"

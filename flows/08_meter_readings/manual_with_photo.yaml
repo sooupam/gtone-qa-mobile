@@ -1,0 +1,46 @@
+## Flow — Meter Reading Manual with Photo
+## Tests: leitura manual → foto evidencia → submit
+## Tags: regression, meter
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - meter
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Leituras|Meters"
+
+- tapOn:
+    id: "btn-new-meter-reading"
+
+- tapOn:
+    id: "input-meter-asset"
+- tapOn:
+    id: "asset-item"
+    index: 0
+
+- tapOn:
+    id: "input-meter-value"
+- inputText: "1234.5"
+
+- tapOn:
+    id: "btn-meter-photo"
+- tapOn:
+    id: "gallery-item"
+    index: 0
+- tapOn:
+    id: "btn-confirm-photo"
+
+- hideKeyboard
+- tapOn:
+    id: "btn-meter-submit"
+
+- extendedWaitUntil:
+    visible: "Leitura registrada|Reading saved"
+    timeout: 10000

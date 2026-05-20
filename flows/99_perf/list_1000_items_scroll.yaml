@@ -1,0 +1,35 @@
+## Flow — List 1000 Items Scroll
+## Tests: scroll fluido em lista grande (FPS visual)
+## Tags: perf, slow
+##
+## Requer backend seeded com 1000 OS via scripts/seed-bulk-wos.sh
+appId: net.globalthings.gtone
+tags:
+  - perf
+  - slow
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "OS"
+- extendedWaitUntil:
+    visible:
+      id: "wo-card"
+    timeout: 15000
+
+- repeat:
+    times: 20
+    commands:
+      - swipe:
+          start: 50%, 80%
+          end: 50%, 20%
+          duration: 200
+
+- assertVisible:
+    id: "wo-card"
+    index: 30
+
+- takeScreenshot: scrolled_deep

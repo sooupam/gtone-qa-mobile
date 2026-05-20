@@ -1,0 +1,22 @@
+## Flow — Cold Start Metric
+## Tests: medir tempo cold start (regressao se >3s)
+## Tags: perf, smoke
+appId: net.globalthings.gtone
+tags:
+  - perf
+  - smoke
+---
+- stopApp
+- evalScript:
+    script: |
+      output.t0 = Date.now()
+- launchApp
+- extendedWaitUntil:
+    visible: "GT ONE|Login|Home|Pular"
+    timeout: 5000
+- evalScript:
+    script: |
+      var elapsed = Date.now() - output.t0;
+      output.cold_start_ms = elapsed;
+      console.log('cold_start_ms=' + elapsed);
+      if (elapsed > 3000) throw new Error('REGRESSION: cold start ' + elapsed + 'ms');

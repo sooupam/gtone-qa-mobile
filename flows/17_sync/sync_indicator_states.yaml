@@ -1,0 +1,34 @@
+## Flow — Sync Indicator States
+## Tests: ver banner "Sincronizando", "Modo direto", "Modo offline"
+## Tags: regression, sync
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - sync
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- extendedWaitUntil:
+    visible: "Sincronizando|Modo direto"
+    timeout: 30000
+- takeScreenshot: sync_state_initial
+
+- runScript: ../../scripts/wifi_off.sh
+- extendedWaitUntil:
+    visible: "Modo offline"
+    timeout: 15000
+- takeScreenshot: sync_state_offline
+
+- runScript: ../../scripts/wifi_on.sh
+- extendedWaitUntil:
+    visible: "Sincronizando"
+    timeout: 15000
+- takeScreenshot: sync_state_syncing
+
+- extendedWaitUntil:
+    visible: "Modo direto"
+    timeout: 30000
+- takeScreenshot: sync_state_done

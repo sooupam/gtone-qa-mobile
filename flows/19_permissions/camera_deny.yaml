@@ -1,0 +1,25 @@
+## Flow — Camera Permission Deny
+## Tests: deny camera → mostrar fallback "Anexar arquivo"
+## Tags: regression, permissions
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - permissions
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runScript: ../../scripts/reset_permissions.sh
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    id: "btn-quick-action-photo"
+- tapOn:
+    id: "btn-take-photo"
+
+- tapOn:
+    text: "Negar|Deny|Don't allow|Nao permitir"
+
+- extendedWaitUntil:
+    visible: ".*(permita acesso|grant access|Anexar arquivo).*"
+    timeout: 10000

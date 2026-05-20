@@ -1,0 +1,44 @@
+## Flow — SR Approve and Convert to WO
+## Tests: abrir SR → aprovar → converter em OS → ver OS na lista
+## Tags: critical, sr
+appId: net.globalthings.gtone
+tags:
+  - critical
+  - sr
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Solicitacoes"
+- extendedWaitUntil:
+    visible:
+      id: "sr-card"
+    timeout: 15000
+- tapOn:
+    id: "sr-card"
+    index: 0
+
+- tapOn:
+    id: "btn-sr-approve"
+- tapOn:
+    text: "Converter em OS"
+
+- extendedWaitUntil:
+    visible:
+      id: "input-wo-title"
+    timeout: 15000
+- assertVisible: "Origem.*solicitacao|Sourced from SR"
+
+- tapOn:
+    id: "btn-save-wo"
+
+- extendedWaitUntil:
+    visible: "criada com sucesso"
+    timeout: 15000
+
+- tapOn:
+    text: "OS"
+- assertVisible: ".*Origem SR.*|.*From SR.*"

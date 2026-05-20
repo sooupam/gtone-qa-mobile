@@ -1,0 +1,44 @@
+## Flow — Asset Detail Full
+## Tests: abrir asset via lista → ver abas info/OS/historico/docs
+## Tags: critical, asset
+appId: net.globalthings.gtone
+tags:
+  - critical
+  - asset
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Cadastros"
+- tapOn:
+    text: "Ativos"
+
+- extendedWaitUntil:
+    visible:
+      id: "asset-card"
+    timeout: 15000
+- tapOn:
+    id: "asset-card"
+    index: 0
+
+- extendedWaitUntil:
+    visible: "Informacoes|Info"
+    timeout: 15000
+- assertVisible: ".*Codigo.*|.*Code.*"
+
+- tapOn:
+    text: "OS"
+- assertVisible: ".*(OS|Ordens|Nenhuma).*"
+
+- tapOn:
+    text: "Historico"
+- assertVisible: ".*(Historico|Eventos|Vazio).*"
+
+- tapOn:
+    text: "Docs|Documentos"
+- assertVisible: ".*(Documentos|Anexos|Nenhum).*"
+
+- takeScreenshot: asset_detail_tabs_ok

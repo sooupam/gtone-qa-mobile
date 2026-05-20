@@ -1,0 +1,36 @@
+## Flow — Location Permission Grant Background
+## Tests: opt-in tracking → grant background → mover device (mock) → ver pontos
+## Tags: slow, permissions, tracking
+appId: net.globalthings.gtone
+tags:
+  - slow
+  - permissions
+  - tracking
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runScript: ../../scripts/reset_permissions.sh
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Configuracoes"
+
+- tapOn:
+    id: "switch-tracking"
+
+- tapOn:
+    text: "Permitir|Allow"
+- tapOn:
+    text: "Sempre|All the time|Allow always|Permitir o tempo todo"
+
+- assertVisible: "Tracking ativo|Rastreamento ativo"
+
+- runScript: ../../scripts/inject_mock_location.sh
+
+- tapOn:
+    text: "Historico de rotas|Route history"
+- assertVisible:
+    id: "route-point"

@@ -1,0 +1,71 @@
+## Flow — WO Execute with Pause/Resume
+## Tests: start OS → pausar → retomar → finalizar → assinar
+## Tags: critical, wo
+appId: net.globalthings.gtone
+tags:
+  - critical
+  - wo
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "OS"
+- extendedWaitUntil:
+    visible:
+      id: "wo-card"
+    timeout: 15000
+- tapOn:
+    id: "wo-card"
+    index: 0
+
+- extendedWaitUntil:
+    visible:
+      id: "wo-action-start"
+    timeout: 15000
+- tapOn:
+    id: "wo-action-start"
+- assertVisible: "Em execucao|Em andamento"
+
+- tapOn:
+    id: "wo-action-pause"
+- tapOn:
+    text: "Pausa para almoco"
+    optional: true
+- tapOn:
+    id: "btn-confirm"
+    optional: true
+- assertVisible: "Pausada"
+
+- tapOn:
+    id: "wo-action-resume"
+- assertVisible: "Em execucao|Em andamento"
+
+- tapOn:
+    id: "wo-action-finish"
+- tapOn:
+    id: "input-finish-notes"
+    optional: true
+- inputText: "Concluida em teste E2E"
+- hideKeyboard
+- tapOn:
+    id: "btn-confirm"
+
+- extendedWaitUntil:
+    visible:
+      id: "signature-canvas"
+    timeout: 15000
+
+- swipe:
+    start: 20%, 50%
+    end: 80%, 50%
+    duration: 800
+- tapOn:
+    id: "signature-submit"
+
+- extendedWaitUntil:
+    visible: "Concluida|Finalizada"
+    timeout: 15000
+- takeScreenshot: wo_completed

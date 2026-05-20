@@ -1,0 +1,24 @@
+## Flow — Asset Scan QR Invalid
+## Tests: scan QR de outro app/payload invalido → erro amigavel
+## Tags: critical, asset
+appId: net.globalthings.gtone
+tags:
+  - critical
+  - asset
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    id: "btn-quick-action-qr"
+- openLink: "net.globalthings.gtone://qr-result?payload=invalid-payload-12345"
+
+- extendedWaitUntil:
+    visible: "(QR invalido|invalido|not found|nao encontrado)"
+    timeout: 10000
+
+- tapOn:
+    text: "OK|Tentar novamente"
+    optional: true

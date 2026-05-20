@@ -1,0 +1,36 @@
+## Flow — Offline List Renders Cached
+## Tests: desligar net → abrir lista de OS → ver cache
+## Tags: regression, offline
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - offline
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- extendedWaitUntil:
+    visible: "Modo direto"
+    timeout: 30000
+
+- tapOn:
+    text: "OS"
+- extendedWaitUntil:
+    visible:
+      id: "wo-card"
+    timeout: 15000
+
+- runScript: ../../scripts/wifi_off.sh
+
+- tapOn:
+    text: "Home"
+- tapOn:
+    text: "OS"
+
+- assertVisible:
+    id: "wo-card"
+- assertVisible: "Modo offline"
+
+- runScript: ../../scripts/wifi_on.sh

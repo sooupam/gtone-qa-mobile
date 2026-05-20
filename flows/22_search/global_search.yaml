@@ -1,0 +1,28 @@
+## Flow — Global Search
+## Tests: buscar texto → resultados em assets/OS/locations
+## Tags: regression, search
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - search
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+  SEARCH_TERM: "bomba"
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    id: "btn-global-search"
+- tapOn:
+    id: "input-search"
+- inputText: ${SEARCH_TERM}
+- hideKeyboard
+
+- extendedWaitUntil:
+    visible: "Resultados"
+    timeout: 8000
+
+- assertVisible: "Ativos"
+- assertVisible: "OS"
+- assertVisible: "Locais|Locations"

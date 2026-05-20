@@ -1,0 +1,42 @@
+## Flow — MFA TOTP Invalid
+## Tests: codigo MFA errado → erro + retry counter
+## Tags: regression, auth, mfa
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - auth
+  - mfa
+env:
+  EMAIL_MFA: ${MAESTRO_MFA_EMAIL}
+  PASSWORD_MFA: ${MAESTRO_MFA_PASSWORD}
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    text: "Pular"
+    optional: true
+
+- tapOn:
+    id: "input-email"
+- inputText: ${EMAIL_MFA}
+- tapOn:
+    id: "input-password"
+- inputText: ${PASSWORD_MFA}
+- hideKeyboard
+- tapOn:
+    id: "btn-login"
+
+- extendedWaitUntil:
+    visible: "MFA"
+    timeout: 15000
+
+- tapOn:
+    id: "input-mfa-code"
+- inputText: "000000"
+- hideKeyboard
+- tapOn:
+    id: "btn-mfa-verify"
+
+- extendedWaitUntil:
+    visible: "Codigo invalido|Invalid code"
+    timeout: 10000

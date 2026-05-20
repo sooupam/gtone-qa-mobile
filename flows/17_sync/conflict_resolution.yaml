@@ -1,0 +1,47 @@
+## Flow — Sync Conflict Resolution
+## Tests: editar OS em 2 sessoes → religar → ver resolucao de conflito
+## Tags: slow, sync
+##
+## Requer: pré-seed de OS modificada em outro device via scripts/seed_wo_conflict.sh
+appId: net.globalthings.gtone
+tags:
+  - slow
+  - sync
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "OS"
+- tapOn:
+    id: "wo-card"
+    index: 0
+- tapOn:
+    id: "btn-wo-edit"
+
+- runScript: ../../scripts/wifi_off.sh
+- tapOn:
+    id: "input-wo-description"
+- eraseText
+- inputText: "Edicao local conflitante"
+- hideKeyboard
+- tapOn:
+    id: "btn-wo-save"
+
+## Simula edicao remota concorrente
+- runScript: ../../scripts/seed_wo_conflict.sh
+
+- runScript: ../../scripts/wifi_on.sh
+
+- extendedWaitUntil:
+    visible: "Conflito|Conflict"
+    timeout: 30000
+
+- tapOn:
+    text: "Manter minha versao|Keep mine"
+
+- extendedWaitUntil:
+    visible: "Sincronizado"
+    timeout: 30000

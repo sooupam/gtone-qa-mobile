@@ -1,0 +1,46 @@
+## Flow — Procedure Step by Step
+## Tests: abrir procedimento → executar steps → finalizar
+## Tags: regression, procedures
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - procedures
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "OS"
+- tapOn:
+    id: "wo-card"
+    index: 0
+
+- tapOn:
+    text: "Procedimento|Procedure"
+
+- extendedWaitUntil:
+    visible:
+      id: "procedure-step"
+    timeout: 10000
+
+- tapOn:
+    id: "procedure-step"
+    index: 0
+- tapOn:
+    id: "btn-step-complete"
+- assertVisible: "Step 2"
+
+- tapOn:
+    id: "procedure-step"
+    index: 1
+- tapOn:
+    id: "btn-step-complete"
+
+- tapOn:
+    id: "btn-procedure-finish"
+
+- extendedWaitUntil:
+    visible: "concluido"
+    timeout: 10000

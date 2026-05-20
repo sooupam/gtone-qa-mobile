@@ -1,0 +1,32 @@
+## Flow — Edge: Very Long Text in Fields
+## Tests: colar 10k chars em description → nao trava
+## Tags: regression, edge
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - edge
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "OS"
+- tapOn:
+    id: "fab-create-wo"
+
+- tapOn:
+    id: "input-wo-description"
+- evalScript:
+    script: |
+      output.bigtext = 'A'.repeat(10000)
+- inputText: ${output.bigtext}
+- hideKeyboard
+
+- tapOn:
+    id: "btn-save-wo"
+
+- extendedWaitUntil:
+    visible: "criada com sucesso|description too long|invalido"
+    timeout: 30000

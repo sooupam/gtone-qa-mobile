@@ -1,0 +1,31 @@
+## Flow — IoT Sensor List Filtered
+## Tests: listar sensores → filtrar por "Ativos"
+## Tags: regression, iot
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - iot
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Cadastros"
+- tapOn:
+    text: "Sensores|IoT"
+
+- extendedWaitUntil:
+    visible:
+      id: "sensor-card"
+    timeout: 15000
+
+- tapOn:
+    id: "btn-filter"
+- tapOn:
+    text: "Ativos"
+- tapOn:
+    id: "btn-apply"
+
+- assertVisible: "Status: Ativo"

@@ -1,6 +1,6 @@
 {
   "name": "gtone-qa-mobile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Maestro E2E suite for GT ONE Mobile (net.globalthings.gtone)",
   "scripts": {
@@ -9,12 +9,26 @@
     "test:critical": "maestro test --include-tags=critical flows/",
     "test:regression": "maestro test --include-tags=regression flows/",
     "test:tracking": "maestro test --include-tags=tracking flows/",
+    "test:offline": "maestro test --include-tags=offline flows/",
+    "test:sync": "maestro test --include-tags=sync flows/",
     "test:perf": "maestro test --include-tags=perf flows/",
+    "test:ai": "maestro test --include-tags=ai flows/",
+    "test:iot": "maestro test --include-tags=iot flows/",
+    "test:auth": "maestro test --include-tags=auth flows/",
+    "test:mfa": "maestro test --include-tags=mfa flows/",
+    "test:permissions": "maestro test --include-tags=permissions flows/",
+    "test:edge": "maestro test --include-tags=edge flows/",
+    "test:slow": "maestro test --include-tags=slow flows/",
+    "test:single": "maestro test",
     "studio": "maestro studio",
     "setup:env": "source scripts/setup-env.sh",
     "setup:emulator": "bash scripts/setup-emulator.sh",
     "setup:seed": "bash scripts/seed-supabase.sh",
-    "run:all": "bash scripts/run-all.sh"
+    "reset:app": "bash scripts/reset_permissions.sh",
+    "wifi:off": "bash scripts/wifi_off.sh",
+    "wifi:on": "bash scripts/wifi_on.sh",
+    "run:all": "bash scripts/run-all.sh",
+    "ci": "bash scripts/run-all.sh"
   },
   "engines": {
     "maestro": "2.3.0"

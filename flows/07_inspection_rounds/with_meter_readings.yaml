@@ -1,0 +1,44 @@
+## Flow — Inspection Round with Meter Readings
+## Tests: ponto da ronda → registrar leitura de medidor
+## Tags: regression, inspection, meter
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - inspection
+  - meter
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Rondas"
+
+- tapOn:
+    id: "round-card"
+    index: 0
+- tapOn:
+    id: "btn-round-start"
+
+- tapOn:
+    id: "round-point"
+    index: 0
+
+- tapOn:
+    id: "btn-record-meter"
+- tapOn:
+    id: "input-meter-value"
+- inputText: "150.5"
+- hideKeyboard
+- tapOn:
+    id: "btn-meter-submit"
+- assertVisible: "150.5"
+
+- back
+- tapOn:
+    id: "btn-round-finish"
+- tapOn:
+    id: "btn-confirm"

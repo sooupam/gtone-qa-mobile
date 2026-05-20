@@ -1,0 +1,22 @@
+## Subflow — Cria OS de teste com titulo padrao
+## Pre-req: usuario logado, na Home ou em qualquer tab
+## Env:
+##   WO_TITLE (opcional) — default "WO Test E2E"
+appId: net.globalthings.gtone
+env:
+  WO_TITLE: "WO Test E2E"
+---
+- tapOn:
+    text: "OS"
+- tapOn:
+    id: "fab-create-wo"
+- tapOn:
+    id: "input-wo-title"
+- inputText: ${WO_TITLE}
+- hideKeyboard
+- tapOn:
+    id: "btn-save-wo"
+
+- extendedWaitUntil:
+    visible: "criada com sucesso|wo-detail-screen"
+    timeout: 15000

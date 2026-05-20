@@ -2,13 +2,15 @@ name: E2E (Maestro)
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
+  schedule:
+    - cron: "0 3 * * *"   # nightly regression
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag a rodar (smoke | critical | regression). Vazio = tudo."
+        description: "Tag (smoke | critical | regression). Vazio = critical."
         required: false
         default: "critical"
 
@@ -17,7 +19,7 @@ env:
 
 jobs:
   e2e-android:
-    name: E2E Android API ${{ matrix.api-level }}
+    name: E2E Android API ${{ matrix.api-level }} — tag ${{ matrix.tag }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,6 +28,9 @@ jobs:
         api-level: [31]
         target: [google_apis]
         arch: [x86_64]
+        ## Em PR roda smoke+critical; nightly roda regression
+        tag:
+          - ${{ github.event_name == 'schedule' && 'regression' || 'critical' }}
 
     steps:
       - name: Checkout
@@ -49,14 +54,11 @@ jobs:
           curl -fsSL "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
-      - name: Download GT ONE APK
-        ## NOTA: ajustar pra baixar APK gerado em outro pipeline ou EAS.
-        ## Por enquanto, esperar artefato no repo principal.
+      - name: Download APK
         run: |
           mkdir -p artifacts
-          ## Placeholder — baixar APK de release storage ou eas build
-          echo "TODO: substituir por download real do APK"
-          ## curl -L "$APK_URL" -o artifacts/app-debug.apk
+          ## TODO: substituir por download real do APK (EAS / cross-repo artifact / S3).
+          echo "TODO: APK download. Ver issue #18 (area/infra)."
 
       - name: AVD cache
         uses: actions/cache@v4
@@ -92,38 +94,47 @@ jobs:
             adb wait-for-device
             adb shell input keyevent 82
 
-            ## Port forward (caso backend rode externo, ajustar)
             adb reverse tcp:8081 tcp:8081 || true
             adb reverse tcp:54321 tcp:54321 || true
 
-            ## Install APK
             if [ -f artifacts/app-debug.apk ]; then
               adb install artifacts/app-debug.apk
             else
-              echo "ERRO: artifacts/app-debug.apk não encontrado — etapa anterior precisa ser configurada."
+              echo "ERRO: APK ausente — ver TODO em jobs.Download APK."
               exit 1
             fi
 
-            ## Env vars
+            ## Env vars das secrets/vars (configurar no repo)
             export MAESTRO_TEST_EMAIL="${{ secrets.MAESTRO_TEST_EMAIL }}"
             export MAESTRO_TEST_PASSWORD="${{ secrets.MAESTRO_TEST_PASSWORD }}"
+            export MAESTRO_TEST_EMAIL_B="${{ secrets.MAESTRO_TEST_EMAIL_B }}"
+            export MAESTRO_TEST_PASSWORD_B="${{ secrets.MAESTRO_TEST_PASSWORD_B }}"
             export MAESTRO_TEST_TENANT_SLUG="${{ vars.MAESTRO_TEST_TENANT_SLUG }}"
             export MAESTRO_TEST_COMPANY_ID="${{ vars.MAESTRO_TEST_COMPANY_ID }}"
+            export MAESTRO_TEST_WO_ID="${{ vars.MAESTRO_TEST_WO_ID }}"
+            export MAESTRO_QR_ASSET_PAYLOAD="${{ vars.MAESTRO_QR_ASSET_PAYLOAD }}"
+            export MAESTRO_MFA_EMAIL="${{ secrets.MAESTRO_MFA_EMAIL }}"
+            export MAESTRO_MFA_PASSWORD="${{ secrets.MAESTRO_MFA_PASSWORD }}"
+            export MAESTRO_MFA_SECRET="${{ secrets.MAESTRO_MFA_SECRET }}"
 
-            ## Run flows
             mkdir -p reports
-            TAG="${{ github.event.inputs.tag || 'critical' }}"
-            if [ -n "$TAG" ]; then
-              maestro test --include-tags="$TAG" --format=junit --output=reports/junit.xml flows/
-            else
-              maestro test --format=junit --output=reports/junit.xml flows/
+            TAG="${{ github.event.inputs.tag || matrix.tag }}"
+
+            ## smoke roda sempre (gate basico)
+            maestro test --include-tags=smoke --format=junit --output=reports/junit-smoke.xml flows/ || SMOKE_FAIL=1
+
+            ## tag principal do job
+            if [ "$TAG" != "smoke" ]; then
+              maestro test --include-tags="$TAG" --format=junit --output=reports/junit-$TAG.xml flows/
             fi
+
+            if [ "${SMOKE_FAIL:-0}" = "1" ]; then exit 1; fi
 
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: maestro-reports-api${{ matrix.api-level }}
+          name: maestro-reports-api${{ matrix.api-level }}-${{ matrix.tag }}
           path: |
             reports/
             ~/.maestro/tests/**/screenshot-*.png

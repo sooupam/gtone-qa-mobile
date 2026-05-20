@@ -1,0 +1,31 @@
+## Flow — Asset Scan QR to Detail
+## Tests: scan QR → abrir asset (mock via deep link)
+## Tags: critical, asset
+##
+## Requer env:
+##   MAESTRO_QR_ASSET_PAYLOAD — payload do QR de teste (UUID do asset)
+appId: net.globalthings.gtone
+tags:
+  - critical
+  - asset
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+  QR_PAYLOAD: ${MAESTRO_QR_ASSET_PAYLOAD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    id: "btn-quick-action-qr"
+- extendedWaitUntil:
+    visible: "Aponte para o QR|Scanner"
+    timeout: 15000
+
+## Mock injection via deep link (Maestro nao emula camera)
+- openLink: "net.globalthings.gtone://qr-result?payload=${QR_PAYLOAD}"
+
+- extendedWaitUntil:
+    visible: ".*Asset.*|.*Equipamento.*"
+    timeout: 15000
+- assertVisible:
+    id: "asset-detail-header"

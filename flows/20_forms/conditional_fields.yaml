@@ -1,0 +1,41 @@
+## Flow — Forms Conditional Fields
+## Tests: preencher campo → outros aparecem condicionalmente
+## Tags: regression, forms
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - forms
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Cadastros"
+- tapOn:
+    text: "Formularios"
+
+- tapOn:
+    id: "form-template"
+    index: 0
+
+- tapOn:
+    id: "select-trigger-field"
+- tapOn:
+    text: "Opcao que dispara"
+
+- assertVisible:
+    id: "conditional-field"
+
+- tapOn:
+    id: "conditional-field"
+- inputText: "preenchido condicionalmente"
+- hideKeyboard
+
+- tapOn:
+    id: "btn-form-submit"
+
+- extendedWaitUntil:
+    visible: "salvo"
+    timeout: 10000

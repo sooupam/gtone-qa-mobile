@@ -1,0 +1,43 @@
+## Flow — Checklist Execute with Photos
+## Tests: abrir checklist → marcar itens → adicionar foto em item → salvar
+## Tags: regression, checklist
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - checklist
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Cadastros"
+- tapOn:
+    text: "Checklists"
+
+- tapOn:
+    id: "checklist-card"
+    index: 0
+
+- tapOn:
+    id: "checklist-item"
+    index: 0
+- tapOn:
+    id: "btn-add-photo"
+
+- tapOn:
+    text: "Galeria|Galeria de fotos"
+    optional: true
+- tapOn:
+    id: "gallery-item"
+    index: 0
+- tapOn:
+    id: "btn-confirm-photo"
+
+- tapOn:
+    id: "btn-checklist-finish"
+
+- extendedWaitUntil:
+    visible: "concluido|completed"
+    timeout: 10000

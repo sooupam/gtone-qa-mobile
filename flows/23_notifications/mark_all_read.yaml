@@ -1,0 +1,20 @@
+## Flow — Notifications Mark All Read
+## Tests: marcar todas como lidas → contador zera
+## Tags: regression, notifications
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - notifications
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    id: "btn-notifications-bell"
+- tapOn:
+    id: "btn-mark-all-read"
+
+- assertNotVisible:
+    id: "notification-badge"

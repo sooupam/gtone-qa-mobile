@@ -1,0 +1,36 @@
+## Flow — WO Cancel with Reason
+## Tests: start OS → cancelar com motivo → confirmar status
+## Tags: critical, wo
+appId: net.globalthings.gtone
+tags:
+  - critical
+  - wo
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "OS"
+- tapOn:
+    id: "wo-card"
+    index: 0
+
+- tapOn:
+    id: "wo-action-more"
+- tapOn:
+    text: "Cancelar OS"
+
+- tapOn:
+    id: "input-cancel-reason"
+- inputText: "Cancelada via teste E2E - sem peca em estoque"
+- hideKeyboard
+
+- tapOn:
+    id: "btn-confirm"
+
+- extendedWaitUntil:
+    visible: "Cancelada"
+    timeout: 10000
+- assertVisible: ".*Cancelada via teste E2E.*"

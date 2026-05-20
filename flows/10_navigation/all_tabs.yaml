@@ -1,0 +1,35 @@
+## Flow — Navigation All Tabs
+## Tests: tap em cada tab → verificar header/conteudo
+## Tags: critical, navigation
+appId: net.globalthings.gtone
+tags:
+  - critical
+  - navigation
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Home"
+- assertVisible: "Minhas OS|Home|Inicio"
+
+- tapOn:
+    text: "OS"
+- assertVisible: "Ordens de Servico|OS"
+
+- tapOn:
+    text: "Solicitacoes"
+- assertVisible: "Solicitacoes"
+
+- tapOn:
+    text: "Cadastros"
+- assertVisible: "Cadastros|Ativos|Locais"
+
+- tapOn:
+    text: "Mais"
+- assertVisible: "Configuracoes|Perfil|Sair"
+
+- tapOn:
+    text: "Home"
