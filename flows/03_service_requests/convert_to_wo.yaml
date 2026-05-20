@@ -1,0 +1,37 @@
+## Flow — Service Request → Convert to Work Order
+## Tests: criar SR → abrir → converter em OS → confirmar navegação
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: create.yaml
+
+## Voltar pra lista de solicitações
+- tapOn:
+    text: "Solicitações"
+
+## Abrir SR recém-criada
+- extendedWaitUntil:
+    visible:
+      text: "SR E2E Test Maestro"
+    timeout: 10000
+- tapOn:
+    text: "SR E2E Test Maestro"
+
+## Tap em "Converter em OS" / "Criar OS"
+- extendedWaitUntil:
+    visible:
+      text: "Converter|Criar OS"
+    timeout: 10000
+- tapOn:
+    text: "Converter|Criar OS"
+
+## Confirma navegação para tela de OS
+- extendedWaitUntil:
+    visible:
+      id: "wo-detail-screen|input-wo-title"
+    timeout: 15000

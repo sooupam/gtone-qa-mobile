@@ -1,0 +1,38 @@
+## Flow — Settings Theme Switch
+## Tests: Light → Dark → System
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Configurações"
+
+- extendedWaitUntil:
+    visible:
+      text: "Tema|Aparência"
+    timeout: 10000
+
+- tapOn:
+    text: "Tema|Aparência"
+
+- tapOn:
+    text: "Escuro|Dark"
+- waitForAnimationToEnd:
+    timeout: 2000
+
+- tapOn:
+    text: "Claro|Light"
+- waitForAnimationToEnd:
+    timeout: 2000
+
+- tapOn:
+    text: "Sistema|System"
+    optional: true

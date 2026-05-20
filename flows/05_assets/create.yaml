@@ -1,0 +1,43 @@
+## Flow — Asset Create (Novo Ativo)
+## Tests: Cadastros → Ativos → FAB → form → save → detalhe
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Cadastros"
+- tapOn:
+    text: "Ativos"
+
+- tapOn:
+    id: "fab-create-asset"
+
+## Nome
+- tapOn:
+    id: "input-asset-name"
+- inputText: "Ativo E2E Test - Maestro"
+- hideKeyboard
+
+## Code/Tag
+- tapOn:
+    id: "input-asset-code"
+    optional: true
+- inputText: "AST-E2E-001"
+- hideKeyboard
+
+- waitForAnimationToEnd:
+    timeout: 2000
+
+- tapOn:
+    id: "btn-save-asset"
+
+- extendedWaitUntil:
+    visible:
+      id: "asset-detail-screen"
+    timeout: 15000

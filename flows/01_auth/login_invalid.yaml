@@ -1,0 +1,64 @@
+## Flow 02 — Auth Login Invalid Credentials
+## Tests: wrong password → error shown → retry with correct → success
+## Tags: critical
+appId: net.globalthings.gtone
+tags:
+  - critical
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- launchApp:
+    clearState: true
+
+- tapOn:
+    text: "Pular"
+    optional: true
+
+- extendedWaitUntil:
+    visible:
+      id: "input-email"
+    timeout: 30000
+
+- tapOn:
+    id: "input-email"
+- inputText: ${EMAIL}
+- tapOn:
+    id: "input-password"
+- inputText: "senha-errada-qa-test"
+- hideKeyboard
+- tapOn:
+    id: "btn-login"
+
+## Expect error state — botão de login ainda visível (não navegou)
+- extendedWaitUntil:
+    visible:
+      id: "btn-login"
+    timeout: 10000
+
+## Retry com senha correta
+- tapOn:
+    id: "input-password"
+- eraseText
+- inputText: ${PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: "btn-login"
+
+## Post-login
+- extendedWaitUntil:
+    visible:
+      text: "Configurar depois|Selecione o ambiente|OS"
+    timeout: 25000
+
+- tapOn:
+    text: "Rededor Demo|Demo Company"
+    optional: true
+- tapOn:
+    text: "Configurar depois"
+    optional: true
+
+- extendedWaitUntil:
+    visible:
+      text: "OS"
+    timeout: 30000

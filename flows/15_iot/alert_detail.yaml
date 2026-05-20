@@ -1,0 +1,32 @@
+## Flow — IoT Alert Detail
+## Tests: abrir alerta → ver detalhes/threshold
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: sensor_list.yaml
+
+## Tab alertas
+- tapOn:
+    text: "Alertas"
+    optional: true
+- tapOn:
+    id: "tab-iot-alerts"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+## Abrir 1º alerta
+- tapOn:
+    index: 0
+    text: ".*"
+
+- extendedWaitUntil:
+    visible:
+      text: "Sensor|Limite|Threshold"
+    timeout: 10000

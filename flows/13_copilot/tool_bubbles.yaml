@@ -1,0 +1,92 @@
+## Flow 14b — Copilot Tool Call Bubbles
+## Tests: rich data rendering — markdown, collapsible meta, KPI card, action buttons
+## Tags: regression, slow
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - slow
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+## Navigate to Copilot
+- tapOn:
+    text: "Mais"
+- extendedWaitUntil:
+    visible:
+      text: "AI Copilot"
+    timeout: 10000
+- tapOn:
+    text: "AI Copilot"
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- assertVisible:
+    text: "AI Copilot"
+- takeScreenshot: copilot_01_loaded
+
+## Test 1: KPI query
+- tapOn:
+    id: "copilot-input"
+- inputText: "Quantas OS abertas tenho?"
+- hideKeyboard
+- tapOn:
+    id: "copilot-send"
+
+- extendedWaitUntil:
+    visible:
+      id: "copilot-clear"
+    timeout: 45000
+- waitForAnimationToEnd:
+    timeout: 10000
+- takeScreenshot: copilot_02_kpi_response
+
+## Test 2: Table query
+- tapOn:
+    id: "copilot-input"
+- inputText: "Liste as OS com prioridade alta"
+- hideKeyboard
+- tapOn:
+    id: "copilot-send"
+
+- extendedWaitUntil:
+    visible:
+      id: "copilot-clear"
+    timeout: 45000
+- waitForAnimationToEnd:
+    timeout: 10000
+- takeScreenshot: copilot_03_table_response
+
+- tapOn:
+    text: "resultado"
+    optional: true
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: copilot_04_table_expanded
+
+## Test 3: Navigation query
+- tapOn:
+    id: "copilot-input"
+- inputText: "Me mostra a OS mais recente"
+- hideKeyboard
+- tapOn:
+    id: "copilot-send"
+
+- extendedWaitUntil:
+    visible:
+      id: "copilot-clear"
+    timeout: 45000
+- waitForAnimationToEnd:
+    timeout: 10000
+- takeScreenshot: copilot_05_action_buttons
+
+## Test 4: Clear
+- tapOn:
+    id: "copilot-clear"
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: copilot_06_cleared
+
+- back

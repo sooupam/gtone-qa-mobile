@@ -1,0 +1,19 @@
+{
+  "fixtures": [
+    {
+      "code": "AST-E2E-001",
+      "name": "Compressor Linha A",
+      "qr_payload": "gtone://asset/AST-E2E-001"
+    },
+    {
+      "code": "AST-E2E-002",
+      "name": "Esteira Transportadora 12",
+      "qr_payload": "gtone://asset/AST-E2E-002"
+    },
+    {
+      "code": "AST-E2E-003",
+      "name": "Bomba Hidráulica Sul",
+      "qr_payload": "gtone://asset/AST-E2E-003"
+    }
+  ]
+}

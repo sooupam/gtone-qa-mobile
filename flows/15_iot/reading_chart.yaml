@@ -1,0 +1,29 @@
+## Flow — IoT Reading Chart
+## Tests: abrir sensor → ver gráfico de leituras
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: sensor_list.yaml
+
+## Abrir 1º sensor
+- tapOn:
+    index: 0
+    text: ".*"
+
+- extendedWaitUntil:
+    visible:
+      id: "iot-reading-chart"
+    timeout: 15000
+
+## Trocar timeframe
+- tapOn:
+    text: "24h|7d|30d"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 3000

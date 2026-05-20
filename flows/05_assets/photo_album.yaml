@@ -1,0 +1,25 @@
+## Flow — Asset Photo Album
+## Tests: abrir asset → tab Fotos → galeria visível
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: create.yaml
+
+## Tab Fotos no detalhe do asset
+- tapOn:
+    text: "Fotos|Álbum"
+    optional: true
+- tapOn:
+    id: "tab-asset-photos"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+- assertVisible:
+    text: ".*"

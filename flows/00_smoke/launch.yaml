@@ -1,0 +1,13 @@
+## Flow 00 — Smoke Test: app launches without crashing
+## No credentials needed — just verifies the app cold-starts
+## Tags: smoke
+appId: net.globalthings.gtone
+tags:
+  - smoke
+---
+- stopApp
+- launchApp
+- waitForAnimationToEnd:
+    timeout: 15000
+## Either login screen (not logged in) or Home (already logged in) should appear
+- assertVisible: ".*"

@@ -1,0 +1,16 @@
+## Flow — Cold Start Time
+## Tests: stop → launch → primeira tela visível em <8s
+## Tags: perf
+##
+## NOTA: Maestro não mede tempo absoluto. Para métrica real, usar adb logcat
+## com filtro de ReactNativeJS / ActivityManager. Este flow só garante que o
+## app cold-starta sem crash.
+appId: net.globalthings.gtone
+tags:
+  - perf
+---
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible: ".*"
+    timeout: 8000

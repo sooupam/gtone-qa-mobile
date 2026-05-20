@@ -1,0 +1,25 @@
+## Flow — Deep Link Navigation
+## Tests: abrir deep link → app abre na tela alvo
+## Tags: regression
+##
+## Requer setup do Android Intent Filter no manifest (gtone://work-orders/:id).
+## Em emulador: adb shell am start -W -a android.intent.action.VIEW -d "gtone://work-orders/123" net.globalthings.gtone
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+## Abrir deep link via openLink
+- openLink: "gtone://work-orders"
+
+- extendedWaitUntil:
+    visible:
+      text: "OS|Work Order"
+    timeout: 15000
+
+- assertVisible:
+    id: "fab-create-wo"

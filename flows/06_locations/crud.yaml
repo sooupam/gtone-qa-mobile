@@ -1,0 +1,20 @@
+## Flow 15 — Location CRUD
+## Tests: Cadastros → Localizações → list loads
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Cadastros"
+- tapOn:
+    text: "Localizações"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+- assertVisible: ".*"

@@ -1,0 +1,22 @@
+## Flow 12 — Dashboard KPIs
+## Tests: Mais → Dashboard → KPIs render
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Dashboard"
+
+- waitForAnimationToEnd:
+    timeout: 10000
+
+- assertVisible:
+    text: ".*(Abertas|Total|MTTR|Concluídas).*"

@@ -1,0 +1,55 @@
+## Subflow reutilizável — login completo (skip onboarding + login + skip biometria + tenant)
+## Uso: - runFlow: ../shared/_login_helper.yaml
+##
+## Pré-requisitos no caller:
+##   env:
+##     EMAIL: ${MAESTRO_TEST_EMAIL}
+##     PASSWORD: ${MAESTRO_TEST_PASSWORD}
+appId: net.globalthings.gtone
+---
+## Onboarding "Pular" — opcional (pode já ter passado)
+- tapOn:
+    text: "Pular"
+    optional: true
+
+## Wait for login screen
+- extendedWaitUntil:
+    visible:
+      id: "input-email"
+    timeout: 30000
+
+- tapOn:
+    id: "input-email"
+- eraseText
+- inputText: ${EMAIL}
+
+- tapOn:
+    id: "input-password"
+- eraseText
+- inputText: ${PASSWORD}
+
+- hideKeyboard
+- tapOn:
+    id: "btn-login"
+
+## Post-login: auth + PowerSync sync (~10-15s)
+- extendedWaitUntil:
+    visible:
+      text: "Configurar depois|Selecione o ambiente|OS|Demo Company|Início"
+    timeout: 30000
+
+## Tenant picker — opcional
+- tapOn:
+    text: "Rededor Demo|Demo Company"
+    optional: true
+
+## Biometria setup — opcional
+- tapOn:
+    text: "Configurar depois"
+    optional: true
+
+## Wait for Home
+- extendedWaitUntil:
+    visible:
+      text: "OS"
+    timeout: 30000

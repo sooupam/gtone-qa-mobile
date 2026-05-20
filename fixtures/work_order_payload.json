@@ -1,0 +1,10 @@
+{
+  "title": "OS E2E Test - Maestro",
+  "description": "Ordem de servico gerada por suite Maestro para regressao automatica.",
+  "priority": "high",
+  "status": "open",
+  "_assigned_to_placeholder": "REPLACE_WITH_USER_UUID_AT_RUNTIME",
+  "_company_id_placeholder": "REPLACE_WITH_COMPANY_UUID_AT_RUNTIME",
+  "asset_code": "AST-E2E-001",
+  "_note": "UUIDs reais devem vir do env (MAESTRO_TEST_*) — fixtures nao devem conter dados de tenant."
+}

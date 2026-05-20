@@ -1,0 +1,39 @@
+## Flow — Meter Readings: Manual Reading
+## Tests: navegar → registrar leitura manual de medidor
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Leituras|Medidores"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- tapOn:
+    id: "fab-add-reading"
+    optional: true
+- tapOn:
+    text: "Nova leitura"
+    optional: true
+
+- tapOn:
+    id: "input-reading-value"
+- inputText: "1250.5"
+- hideKeyboard
+
+- tapOn:
+    id: "btn-save-reading"
+
+- extendedWaitUntil:
+    visible:
+      text: "salva|registrada|sucesso"
+    timeout: 10000

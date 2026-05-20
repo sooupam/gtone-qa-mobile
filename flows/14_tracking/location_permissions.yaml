@@ -1,0 +1,117 @@
+## Flow 16 — Location Tracking Lifecycle
+## Tests: enable tracking → check-in WO → GPS indicator → pause/resume → check-out
+## Tags: tracking, slow
+appId: net.globalthings.gtone
+tags:
+  - tracking
+  - slow
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../02_work_orders/create.yaml
+
+## Step 1: Enable tracking in Settings
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Configurações"
+- extendedWaitUntil:
+    visible:
+      text: "Localização em tempo real"
+    timeout: 10000
+
+- tapOn:
+    text: "Localização em tempo real"
+
+- extendedWaitUntil:
+    visible:
+      text: "Localização compartilhada apenas durante OS ativas."
+    timeout: 5000
+
+- tapOn:
+    text: "Saiba mais"
+- extendedWaitUntil:
+    visible:
+      text: "supervisores da sua empresa"
+    timeout: 5000
+
+## Step 2: Open the WO
+- tapOn:
+    text: "OS"
+- extendedWaitUntil:
+    visible:
+      text: "OS E2E Test - Maestro"
+    timeout: 10000
+- tapOn:
+    text: "OS E2E Test - Maestro"
+
+## Step 3: Check-in (tracking auto-start)
+- extendedWaitUntil:
+    visible:
+      id: "btn-checkin"
+    timeout: 15000
+- tapOn:
+    id: "btn-checkin"
+
+- extendedWaitUntil:
+    visible:
+      text: "GPS"
+    timeout: 10000
+
+## Step 4: Open tracking status modal
+- tapOn:
+    text: "GPS"
+- extendedWaitUntil:
+    visible:
+      text: "Rastreamento ativo"
+    timeout: 5000
+- extendedWaitUntil:
+    visible:
+      text: "OS vinculada"
+    timeout: 5000
+
+## Step 5: Pause
+- tapOn:
+    text: "Pausar rastreio"
+- extendedWaitUntil:
+    visible:
+      text: "GPS"
+    timeout: 5000
+- tapOn:
+    text: "GPS"
+- extendedWaitUntil:
+    visible:
+      text: "Rastreamento pausado"
+    timeout: 5000
+
+## Step 6: Resume
+- tapOn:
+    text: "Retomar rastreio"
+- extendedWaitUntil:
+    visible:
+      text: "GPS"
+    timeout: 5000
+- tapOn:
+    text: "GPS"
+- extendedWaitUntil:
+    visible:
+      text: "Rastreamento ativo"
+    timeout: 5000
+
+## Disable
+- tapOn:
+    text: "Desativar rastreio"
+
+## Step 7: Check-out
+- extendedWaitUntil:
+    visible:
+      id: "btn-checkout"
+    timeout: 10000
+- tapOn:
+    id: "btn-checkout"
+
+- extendedWaitUntil:
+    visible:
+      id: "btn-checkin"
+    timeout: 10000

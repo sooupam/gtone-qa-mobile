@@ -1,0 +1,46 @@
+## Flow 03 — Auth Logout
+## Tests: login → Mais → Configurações → Logout → back to login
+## Tags: critical
+##
+## KNOWN BUG: Maestro 2.4.0 tap/longPress pode não disparar onPress no Pressable
+## (RN 0.76 Bridgeless + Fabric). Botão funciona manualmente. Retestar quando
+## Maestro atualizar ou RN regredir para Bridge.
+appId: net.globalthings.gtone
+tags:
+  - critical
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Configurações"
+
+- scrollUntilVisible:
+    element:
+      id: "btn-logout"
+    direction: DOWN
+    centerElement: true
+
+- tapOn:
+    id: "btn-logout"
+- waitForAnimationToEnd:
+    timeout: 3000
+
+## Custom Modal confirmation dialog
+- extendedWaitUntil:
+    visible:
+      text: "Deseja sair"
+    timeout: 10000
+
+- tapOn:
+    id: "btn-logout-confirm"
+
+## Back to login screen
+- extendedWaitUntil:
+    visible:
+      text: "Pular|Entrar"
+    timeout: 30000

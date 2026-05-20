@@ -1,0 +1,43 @@
+## Flow — WO Sign Envelope (Assinatura digital)
+## Tests: criar WO → executar → finalizar com assinatura digital
+## Pré-requisito: backend signature endpoint up
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: execute_full.yaml
+
+## Após check-out, esperar botão de finalizar
+- extendedWaitUntil:
+    visible:
+      text: "Finalizar|Concluir|Assinar"
+    timeout: 10000
+
+- tapOn:
+    text: "Finalizar|Concluir|Assinar"
+
+## Modal de assinatura
+- extendedWaitUntil:
+    visible:
+      id: "signature-canvas"
+    timeout: 10000
+
+## Simular assinatura via swipe na canvas
+- swipe:
+    from:
+      id: "signature-canvas"
+    direction: RIGHT
+    duration: 1000
+
+- tapOn:
+    id: "signature-submit"
+
+## Confirma navegação pós-assinatura
+- extendedWaitUntil:
+    visible:
+      text: "OS|Concluída|sucesso"
+    timeout: 15000

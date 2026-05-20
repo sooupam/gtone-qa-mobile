@@ -1,0 +1,30 @@
+## Flow 04 — WO List + Filter
+## Tests: navigate to OS list → filter by status chip → clear
+## Tags: critical
+appId: net.globalthings.gtone
+tags:
+  - critical
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "OS"
+
+## Tap "Abertas" quick-filter chip
+- tapOn:
+    text: "Abertas"
+
+## List should render (no crash)
+- extendedWaitUntil:
+    visible:
+      id: "fab-create-wo"
+    timeout: 10000
+
+## Tap "Todas" to reset
+- tapOn:
+    text: "Todas"
+- assertVisible:
+    id: "fab-create-wo"

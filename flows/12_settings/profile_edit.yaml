@@ -1,0 +1,35 @@
+## Flow — Settings Profile Edit
+## Tests: editar nome/perfil → salvar → recarregar
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Perfil|Meu Perfil"
+
+- extendedWaitUntil:
+    visible:
+      id: "input-profile-name"
+    timeout: 10000
+
+- tapOn:
+    id: "input-profile-name"
+- eraseText
+- inputText: "Daniel R. (E2E)"
+- hideKeyboard
+
+- tapOn:
+    id: "btn-save-profile"
+
+- extendedWaitUntil:
+    visible:
+      text: "sucesso|salvo|atualizado"
+    timeout: 10000

@@ -1,0 +1,43 @@
+## Flow 05 — Create Work Order
+## Cenário: login → OS tab → FAB → preencher título → salvar → navega para detalhe
+##
+## Asserção final: testID "wo-detail-screen" (distinto do input de título) —
+## prova que o Salvar disparou e o router.replace navegou para /work-orders/:id.
+## NÃO usar text: "OS E2E Test - Maestro" — esse texto existe no input também
+## (false-positive conhecido, BUG-WO-MOB-001).
+##
+## PROBLEMA HISTÓRICO: Maestro 2.4.0 × RN 0.76 Bridgeless/Fabric — tap em
+## Pressable no footer abaixo de ScrollView pode não disparar onPress.
+## Se este flow falhar na asserção final, o save não disparou — não é falha
+## de asserção, é o bug do Fabric. Rodar em S25 físico pra confirmar.
+##
+## Tags: critical
+appId: net.globalthings.gtone
+tags:
+  - critical
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "OS"
+- tapOn:
+    id: "fab-create-wo"
+
+- tapOn:
+    id: "input-wo-title"
+- inputText: "OS E2E Test - Maestro"
+- hideKeyboard
+- waitForAnimationToEnd:
+    timeout: 3000
+
+- tapOn:
+    id: "btn-save-wo"
+
+## Asserção correta: navegação para tela de detalhe (testID único)
+- extendedWaitUntil:
+    visible:
+      id: "wo-detail-screen"
+    timeout: 15000

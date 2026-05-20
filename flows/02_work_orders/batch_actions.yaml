@@ -1,0 +1,36 @@
+## Flow 07 — WO Batch Actions
+## Tests: long-press WO → select mode → select all → batch bar appears
+## Depende do Flow 05 criando uma WO primeiro (lista precisa ter >= 1 item)
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: create.yaml
+
+- extendedWaitUntil:
+    visible:
+      text: "OS E2E Test - Maestro"
+    timeout: 10000
+
+## Long-press para entrar no select mode
+- longPressOn:
+    text: "OS E2E Test - Maestro"
+
+## Verify select mode: botão "Selecionar tudo" no header
+- extendedWaitUntil:
+    visible:
+      text: "Selecionar tudo"
+    timeout: 5000
+
+- tapOn:
+    text: "Selecionar tudo"
+
+## Verify batch action bar (Iniciar visível)
+- extendedWaitUntil:
+    visible:
+      text: "Iniciar"
+    timeout: 5000

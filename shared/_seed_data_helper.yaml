@@ -1,0 +1,8 @@
+## Subflow — placeholder para seed/reset de dados via shell
+## Em CI, prefira chamar scripts/seed-supabase.sh antes do maestro test.
+## Este flow só re-launcha o app pra garantir estado conhecido.
+appId: net.globalthings.gtone
+---
+- stopApp
+- launchApp:
+    clearState: false

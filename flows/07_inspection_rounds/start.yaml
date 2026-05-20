@@ -1,0 +1,32 @@
+## Flow — Inspection Rounds: Start
+## Tests: Mais → Rondas → iniciar primeira disponível
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Rondas|Inspeção"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+## Iniciar primeira ronda disponível
+- runFlow:
+    when:
+      visible:
+        text: "Iniciar"
+    commands:
+      - tapOn:
+          text: "Iniciar"
+      - extendedWaitUntil:
+          visible:
+            text: "Pontos|Itens|Asset"
+          timeout: 10000

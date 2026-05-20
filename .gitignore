@@ -1,0 +1,28 @@
+## Reports gerados em runtime
+reports/
+*.xml
+*.log
+
+## Screenshots de debug do Maestro
+*.png
+!fixtures/**/*.png
+
+## OS / Editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+## Env local — NUNCA commitar. Use .env.example como template.
+.env
+.env.local
+.env.*.local
+
+## Node
+node_modules/
+npm-debug.log*
+
+## Build artifacts
+*.apk
+*.aab
+*.ipa

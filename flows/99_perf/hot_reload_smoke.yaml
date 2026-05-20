@@ -1,0 +1,25 @@
+## Flow — Hot Reload Smoke
+## Tests: app em foreground → background → foreground (hot resume)
+## Tags: perf
+appId: net.globalthings.gtone
+tags:
+  - perf
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+## Background
+- pressKey: HOME
+- waitForAnimationToEnd:
+    timeout: 2000
+
+## Foreground
+- launchApp:
+    clearState: false
+
+- extendedWaitUntil:
+    visible:
+      text: "OS"
+    timeout: 10000

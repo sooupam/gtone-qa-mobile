@@ -1,0 +1,181 @@
+## Flow 16b — Location Tracking Lifecycle (Device — no clear state)
+## Variant for physical devices where clearState may fail.
+## Handles onboarding + login inline if app is on those screens.
+## Tags: tracking, slow, device
+appId: net.globalthings.gtone
+tags:
+  - tracking
+  - slow
+  - device
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+## Pre-flight: onboarding inline
+- runFlow:
+    when:
+      visible:
+        text: "Pular"
+    commands:
+      - tapOn:
+          text: "Pular"
+
+## Pre-flight: login inline
+- runFlow:
+    when:
+      visible:
+        id: "input-email"
+    commands:
+      - tapOn:
+          id: "input-email"
+      - inputText: ${EMAIL}
+      - tapOn:
+          id: "input-password"
+      - inputText: ${PASSWORD}
+      - hideKeyboard
+      - tapOn:
+          id: "btn-login"
+
+## Pre-flight: biometria
+- runFlow:
+    when:
+      visible:
+        text: "Configurar depois"
+    commands:
+      - tapOn:
+          text: "Configurar depois"
+
+- extendedWaitUntil:
+    visible:
+      text: "OS"
+    timeout: 30000
+
+## Settings — enable tracking
+- tapOn:
+    text: "Mais"
+- extendedWaitUntil:
+    visible:
+      text: "Configurações"
+    timeout: 10000
+- tapOn:
+    text: "Configurações"
+- extendedWaitUntil:
+    visible:
+      text: "Localização em tempo real"
+    timeout: 10000
+
+- tapOn:
+    text: "Localização em tempo real"
+- waitForAnimationToEnd
+
+- extendedWaitUntil:
+    visible:
+      text: "Localização compartilhada apenas durante OS ativas."
+    timeout: 5000
+
+- tapOn:
+    text: "Saiba mais"
+- extendedWaitUntil:
+    visible:
+      text: "supervisores da sua empresa"
+    timeout: 5000
+
+## WO tab
+- back
+- tapOn:
+    text: "OS"
+- extendedWaitUntil:
+    visible:
+      text: "OS"
+    timeout: 10000
+- waitForAnimationToEnd
+
+## Open first WO
+- tapOn:
+    index: 0
+
+- extendedWaitUntil:
+    visible:
+      text: "Check-in"
+    timeout: 15000
+
+## Check-in
+- tapOn:
+    text: "Check-in"
+- waitForAnimationToEnd
+
+## Permission dialogs
+- runFlow:
+    when:
+      visible:
+        text: "Permitir"
+    commands:
+      - tapOn:
+          text: "Permitir"
+- runFlow:
+    when:
+      visible:
+        text: "Durante o uso do app"
+    commands:
+      - tapOn:
+          text: "Durante o uso do app"
+- runFlow:
+    when:
+      visible:
+        text: "Permitir o tempo todo"
+    commands:
+      - tapOn:
+          text: "Permitir o tempo todo"
+
+- extendedWaitUntil:
+    visible:
+      text: "GPS"
+    timeout: 15000
+
+## Modal: active
+- tapOn:
+    text: "GPS"
+- extendedWaitUntil:
+    visible:
+      text: "Rastreamento ativo"
+    timeout: 5000
+
+## Pause
+- tapOn:
+    text: "Pausar rastreio"
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible:
+      text: "GPS"
+    timeout: 5000
+
+- tapOn:
+    text: "GPS"
+- extendedWaitUntil:
+    visible:
+      text: "Rastreamento pausado"
+    timeout: 5000
+
+## Resume
+- tapOn:
+    text: "Retomar rastreio"
+- waitForAnimationToEnd
+
+## Check-out
+- tapOn:
+    text: "Check-out"
+- waitForAnimationToEnd
+
+## Disable
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Configurações"
+- extendedWaitUntil:
+    visible:
+      text: "Localização em tempo real"
+    timeout: 10000
+- tapOn:
+    text: "Localização em tempo real"
+- waitForAnimationToEnd
+- back

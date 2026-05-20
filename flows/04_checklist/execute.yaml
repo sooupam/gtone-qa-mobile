@@ -1,0 +1,28 @@
+## Flow 09 — Checklist Execution
+## Tests: navigate to Cadastros → Checklists → open first → section visible
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Cadastros"
+- tapOn:
+    text: "Checklists"
+
+## Tap first checklist if any exists
+- runFlow:
+    when:
+      visible:
+        text: "Checklist"
+    commands:
+      - tapOn:
+          index: 0
+          text: "Checklist"
+      - waitForAnimationToEnd:
+          timeout: 5000

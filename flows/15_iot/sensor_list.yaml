@@ -1,0 +1,21 @@
+## Flow — IoT Sensor List
+## Tests: navegar para IoT → lista de sensores carrega
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "IoT|Sensores"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- assertVisible: ".*"

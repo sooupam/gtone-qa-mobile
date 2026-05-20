@@ -1,0 +1,69 @@
+## Flow 14 — Copilot Chat (basic)
+## Tests: abrir copilot → enviar pergunta → receber resposta
+## Tags: regression, slow
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - slow
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+## Navigate to Copilot
+- tapOn:
+    text: "Mais"
+- runFlow:
+    when:
+      visible:
+        text: "Copilot"
+    commands:
+      - tapOn:
+          text: "Copilot"
+      - waitForAnimationToEnd:
+          timeout: 5000
+
+      - assertVisible:
+          text: "Copilot"
+
+      ## KPI query
+      - tapOn:
+          id: "copilot-input"
+          optional: true
+      - tapOn:
+          text: "Pergunte algo..."
+          optional: true
+      - inputText: "Quantas OS abertas tenho?"
+      - hideKeyboard
+      - tapOn:
+          id: "copilot-send"
+          optional: true
+      - tapOn:
+          text: "Enviar"
+          optional: true
+
+      - extendedWaitUntil:
+          visible:
+            text: "Copilot"
+          timeout: 30000
+
+      - extendedWaitUntil:
+          notVisible:
+            text: "Gravando..."
+          timeout: 5000
+          optional: true
+
+      - waitForAnimationToEnd:
+          timeout: 10000
+      - takeScreenshot: copilot_kpi_response
+
+      ## Clear
+      - tapOn:
+          id: "copilot-clear"
+          optional: true
+      - tapOn:
+          text: "Excluir"
+          optional: true
+
+      - back

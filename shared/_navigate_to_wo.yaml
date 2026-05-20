@@ -1,0 +1,10 @@
+## Subflow — navega para a tab OS
+## Pré-requisito: estar logado e na Home
+appId: net.globalthings.gtone
+---
+- tapOn:
+    text: "OS"
+- extendedWaitUntil:
+    visible:
+      id: "fab-create-wo"
+    timeout: 10000

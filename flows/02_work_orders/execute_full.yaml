@@ -1,0 +1,42 @@
+## Flow 06 — WO Execute Full Cycle
+## Tests: open WO detail → check-in → check-out
+## Cria uma WO fresca via Flow 05, depois abre e executa
+## Tags: critical
+appId: net.globalthings.gtone
+tags:
+  - critical
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: create.yaml
+
+## Open the WO we just created
+- extendedWaitUntil:
+    visible:
+      text: "OS E2E Test - Maestro"
+    timeout: 10000
+- tapOn:
+    text: "OS E2E Test - Maestro"
+
+## Wait for detail (check-in button gated by status open/assigned)
+- extendedWaitUntil:
+    visible:
+      id: "btn-checkin"
+    timeout: 15000
+- tapOn:
+    id: "btn-checkin"
+
+## After check-in, button switches to check-out
+- extendedWaitUntil:
+    visible:
+      id: "btn-checkout"
+    timeout: 10000
+- tapOn:
+    id: "btn-checkout"
+
+## After check-out, back to check-in (labor closed)
+- extendedWaitUntil:
+    visible:
+      id: "btn-checkin"
+    timeout: 10000

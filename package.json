@@ -1,0 +1,27 @@
+{
+  "name": "gtone-qa-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Maestro E2E suite for GT ONE Mobile (net.globalthings.gtone)",
+  "scripts": {
+    "test": "maestro test flows/",
+    "test:smoke": "maestro test --include-tags=smoke flows/",
+    "test:critical": "maestro test --include-tags=critical flows/",
+    "test:regression": "maestro test --include-tags=regression flows/",
+    "test:tracking": "maestro test --include-tags=tracking flows/",
+    "test:perf": "maestro test --include-tags=perf flows/",
+    "studio": "maestro studio",
+    "setup:env": "source scripts/setup-env.sh",
+    "setup:emulator": "bash scripts/setup-emulator.sh",
+    "setup:seed": "bash scripts/seed-supabase.sh",
+    "run:all": "bash scripts/run-all.sh"
+  },
+  "engines": {
+    "maestro": "2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sooupam/gtone-qa-mobile.git"
+  },
+  "license": "UNLICENSED"
+}

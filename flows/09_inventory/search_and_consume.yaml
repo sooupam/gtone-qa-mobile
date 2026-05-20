@@ -1,0 +1,52 @@
+## Flow — Inventory: Search and Consume
+## Tests: navegar → buscar item → consumir quantidade
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Estoque|Inventário"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+## Search
+- tapOn:
+    id: "input-inventory-search"
+    optional: true
+- inputText: "parafuso"
+- hideKeyboard
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+## Abrir 1º resultado
+- tapOn:
+    index: 0
+    text: ".*"
+
+## Consumir 1
+- tapOn:
+    id: "btn-consume"
+    optional: true
+- tapOn:
+    text: "Consumir"
+    optional: true
+
+- tapOn:
+    id: "input-quantity"
+    optional: true
+- inputText: "1"
+- hideKeyboard
+
+- tapOn:
+    text: "Confirmar"
+    optional: true

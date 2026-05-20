@@ -1,0 +1,45 @@
+## Flow 08 — Service Request Create
+## Tests: navigate to Solicitações → create SR → save
+## Tags: critical
+appId: net.globalthings.gtone
+tags:
+  - critical
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Solicitações"
+- tapOn:
+    id: "fab-create-sr"
+
+## Fill description (placeholder)
+- tapOn:
+    text: "Descreva o problema relatado..."
+- inputText: "SR E2E Test Maestro automation flow"
+- hideKeyboard
+
+- assertVisible:
+    text: "Prioridade sugerida"
+
+## Scroll up to ensure Save visible
+- swipe:
+    direction: UP
+    duration: 300
+
+- tapOn:
+    id: "btn-save-sr"
+
+- extendedWaitUntil:
+    visible:
+      text: "Solicitações|criada|sucesso|OK"
+    timeout: 15000
+
+- tapOn:
+    text: "^OK$"
+    optional: true
+
+- assertVisible:
+    text: "Cadastros|Mais"

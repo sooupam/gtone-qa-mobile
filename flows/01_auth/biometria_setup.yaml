@@ -1,0 +1,52 @@
+## Flow — Biometria Setup (opt-in)
+## Tests: login fresh → tela de biometria → Configurar agora → fluxo de setup
+## NOTA: emulador não tem hardware biométrico; este flow valida a UI de opt-in
+##       e o fallback de "Configurar depois".
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- launchApp:
+    clearState: true
+
+- tapOn:
+    text: "Pular"
+    optional: true
+
+- extendedWaitUntil:
+    visible:
+      id: "input-email"
+    timeout: 30000
+
+- tapOn:
+    id: "input-email"
+- inputText: ${EMAIL}
+- tapOn:
+    id: "input-password"
+- inputText: ${PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: "btn-login"
+
+## Espera tela de biometria aparecer
+- extendedWaitUntil:
+    visible:
+      text: "Configurar depois|Configurar agora"
+    timeout: 25000
+
+## Validar texto explicativo
+- assertVisible:
+    text: ".*biometria|biométric.*"
+
+## "Configurar depois" deve avançar pra Home
+- tapOn:
+    text: "Configurar depois"
+
+- extendedWaitUntil:
+    visible:
+      text: "OS"
+    timeout: 30000

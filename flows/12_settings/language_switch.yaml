@@ -1,0 +1,39 @@
+## Flow 13 — Settings Language Switch
+## Tests: change language → labels update → revert
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Configurações"
+
+- extendedWaitUntil:
+    visible:
+      text: "Idioma"
+    timeout: 10000
+
+## English
+- tapOn:
+    text: "English \\(US\\)"
+
+- extendedWaitUntil:
+    visible:
+      text: "Language"
+    timeout: 10000
+
+## Revert
+- tapOn:
+    text: "Português \\(BR\\)"
+
+- extendedWaitUntil:
+    visible:
+      text: "Idioma"
+    timeout: 10000

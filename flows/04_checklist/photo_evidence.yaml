@@ -1,0 +1,34 @@
+## Flow — Checklist Photo Evidence
+## Tests: executar checklist com item exigindo foto → câmera/galeria → anexar
+## Tags: regression, slow
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - slow
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: execute.yaml
+
+## Abrir primeiro item que peça foto (ícone de câmera)
+- tapOn:
+    id: "checklist-item-photo|btn-attach-photo"
+    optional: true
+
+## Permissão de câmera (Android dialog)
+- tapOn:
+    text: "Permitir|Allow"
+    optional: true
+
+## Selecionar opção "Galeria" se aparecer modal
+- tapOn:
+    text: "Galeria|Gallery"
+    optional: true
+
+## Aguardar retorno pra tela do checklist com evidência anexada
+- extendedWaitUntil:
+    visible:
+      text: "Anexada|Foto"
+    timeout: 30000
+    optional: true

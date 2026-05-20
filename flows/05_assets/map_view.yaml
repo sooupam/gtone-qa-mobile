@@ -1,0 +1,35 @@
+## Flow — Asset Map View
+## Tests: Cadastros → Ativos → Mapa → mapa renderiza
+## Tags: regression
+appId: net.globalthings.gtone
+tags:
+  - regression
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Cadastros"
+- tapOn:
+    text: "Ativos"
+
+## Mudar para visão mapa
+- tapOn:
+    id: "btn-asset-map-view|tab-map"
+    optional: true
+- tapOn:
+    text: "Mapa"
+    optional: true
+
+## Permissão de localização (Android)
+- tapOn:
+    text: "Permitir|Allow|Durante o uso do app"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 10000
+
+- assertVisible:
+    id: "asset-map-container|map-view"

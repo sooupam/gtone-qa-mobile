@@ -1,0 +1,50 @@
+## Flow 11 — Tab Navigation
+## Tests: all 5 tabs load without crashing
+## Tags: smoke, critical
+appId: net.globalthings.gtone
+tags:
+  - smoke
+  - critical
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+## Home
+- tapOn:
+    text: "Home"
+- waitForAnimationToEnd:
+    timeout: 3000
+
+## OS
+- tapOn:
+    text: "OS"
+- waitForAnimationToEnd:
+    timeout: 3000
+- assertVisible:
+    id: "fab-create-wo"
+
+## Solicitações
+- tapOn:
+    text: "Solicitações"
+- waitForAnimationToEnd:
+    timeout: 3000
+- assertVisible:
+    id: "fab-create-sr"
+
+## Cadastros
+- tapOn:
+    text: "Cadastros"
+- waitForAnimationToEnd:
+    timeout: 3000
+- assertVisible:
+    text: "Ativos"
+
+## Mais
+- tapOn:
+    text: "Mais"
+- waitForAnimationToEnd:
+    timeout: 3000
+- assertVisible:
+    text: "Configurações"

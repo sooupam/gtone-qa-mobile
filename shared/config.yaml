@@ -1,0 +1,17 @@
+## Maestro shared config for all flows
+## Usage:
+##   maestro test flows/
+##   maestro test flows/01_auth/login_happy.yaml
+##
+## Env vars são carregadas via:
+##   cp .env.example .env.local
+##   source scripts/setup-env.sh
+##
+## Variáveis exigidas (ver .env.example):
+##   MAESTRO_TEST_EMAIL
+##   MAESTRO_TEST_PASSWORD
+##   MAESTRO_TEST_TENANT_SLUG
+##   MAESTRO_TEST_COMPANY_ID
+appId: net.globalthings.gtone
+---
+- stopApp

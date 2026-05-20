@@ -1,0 +1,38 @@
+## Flow — Inspection Round Complete with Readings
+## Tests: ronda iniciada → preencher leituras → finalizar
+## Tags: regression, slow
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - slow
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: start.yaml
+
+## Para cada ponto, fornece uma leitura simples
+- repeat:
+    times: 3
+    commands:
+      - tapOn:
+          id: "input-reading-value"
+          optional: true
+      - inputText: "42"
+      - hideKeyboard
+      - tapOn:
+          text: "Próximo|Avançar"
+          optional: true
+
+## Finalizar ronda
+- scrollUntilVisible:
+    element:
+      text: "Finalizar|Concluir"
+    direction: DOWN
+- tapOn:
+    text: "Finalizar|Concluir"
+
+- extendedWaitUntil:
+    visible:
+      text: "concluída|sucesso|Resumo"
+    timeout: 15000
