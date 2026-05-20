@@ -1,0 +1,48 @@
+## Flow — Inventory Search and Consume (v2 — versao mais robusta)
+## Tests: buscar peca → consumir N unidades → ver historico
+## Tags: regression, inventory
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - inventory
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Estoque|Inventory"
+
+- tapOn:
+    id: "input-inventory-search"
+- inputText: "parafuso"
+- hideKeyboard
+
+- extendedWaitUntil:
+    visible:
+      id: "part-card"
+    timeout: 10000
+
+- tapOn:
+    id: "part-card"
+    index: 0
+
+- tapOn:
+    id: "btn-consume"
+- tapOn:
+    id: "input-quantity"
+- inputText: "5"
+- hideKeyboard
+- tapOn:
+    id: "btn-confirm"
+
+- extendedWaitUntil:
+    visible: "5 unidades consumidas|Consumed"
+    timeout: 10000
+
+- tapOn:
+    text: "Historico"
+- assertVisible: ".*5.*"

@@ -1,0 +1,70 @@
+## Flow — WO Create Full Form
+## Tests: criar OS preenchendo TODOS os campos (priority, assignee, location, equipment, description)
+## Tags: critical, wo
+appId: net.globalthings.gtone
+tags:
+  - critical
+  - wo
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+  WO_TITLE: "OS E2E - Full Form"
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "OS"
+- extendedWaitUntil:
+    visible:
+      id: "fab-create-wo"
+    timeout: 15000
+- tapOn:
+    id: "fab-create-wo"
+
+- extendedWaitUntil:
+    visible:
+      id: "input-wo-title"
+    timeout: 15000
+
+- tapOn:
+    id: "input-wo-title"
+- inputText: ${WO_TITLE}
+
+- tapOn:
+    id: "input-wo-description"
+- inputText: "Descricao de teste E2E criada via Maestro"
+- hideKeyboard
+
+- tapOn:
+    id: "btn-wo-priority"
+- tapOn:
+    text: "Alta"
+
+- tapOn:
+    id: "btn-wo-location"
+    optional: true
+- tapOn:
+    id: "location-item"
+    index: 0
+    optional: true
+
+- tapOn:
+    id: "btn-wo-equipment"
+    optional: true
+- tapOn:
+    id: "asset-item"
+    index: 0
+    optional: true
+
+- hideKeyboard
+- tapOn:
+    id: "btn-save-wo"
+
+- extendedWaitUntil:
+    visible: ".*(criada com sucesso|created).*"
+    timeout: 15000
+
+- tapOn:
+    text: "OS"
+- assertVisible: ${WO_TITLE}
+- takeScreenshot: wo_in_list

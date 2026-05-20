@@ -1,0 +1,51 @@
+## Flow — Auth Logout then Login Other User
+## Tests: logout → login com user diferente → tenant context atualiza
+## Tags: critical, auth
+##
+## Requer env extra:
+##   MAESTRO_TEST_EMAIL_B
+##   MAESTRO_TEST_PASSWORD_B
+appId: net.globalthings.gtone
+tags:
+  - critical
+  - auth
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+  EMAIL_B: ${MAESTRO_TEST_EMAIL_B}
+  PASSWORD_B: ${MAESTRO_TEST_PASSWORD_B}
+---
+- runFlow: login_happy.yaml
+- assertVisible: "Demo Company|Início|OS"
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    id: "btn-logout"
+- tapOn:
+    id: "btn-logout-confirm"
+    optional: true
+
+- extendedWaitUntil:
+    visible:
+      id: "input-email"
+    timeout: 15000
+
+## Login com user B
+- tapOn:
+    id: "input-email"
+- eraseText
+- inputText: ${EMAIL_B}
+- tapOn:
+    id: "input-password"
+- eraseText
+- inputText: ${PASSWORD_B}
+- hideKeyboard
+- tapOn:
+    id: "btn-login"
+
+- extendedWaitUntil:
+    visible: "OS|Início"
+    timeout: 30000
+
+- takeScreenshot: logged_in_user_b

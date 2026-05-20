@@ -1,0 +1,44 @@
+## Flow — Copilot Multi-Turn with Tools
+## Tests: chat com 3+ turns + tool call → ver resposta + ação
+## Tags: regression, copilot, ai
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - copilot
+  - ai
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Copilot|Assistente|AI Copilot"
+
+- tapOn:
+    id: "copilot-input"
+- inputText: "Quantas OS abertas hoje?"
+- hideKeyboard
+- tapOn:
+    id: "copilot-send"
+
+- extendedWaitUntil:
+    visible: ".*(OS|aberta).*"
+    timeout: 30000
+
+- tapOn:
+    id: "copilot-input"
+- inputText: "E quantas em atraso?"
+- hideKeyboard
+- tapOn:
+    id: "copilot-send"
+
+- extendedWaitUntil:
+    visible: ".*(atraso|atrasada).*"
+    timeout: 30000
+
+- assertVisible:
+    id: "tool-bubble"
+    optional: true

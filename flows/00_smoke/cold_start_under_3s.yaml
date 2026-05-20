@@ -1,0 +1,25 @@
+## Flow — Smoke Cold Start Under 3s
+## Tests: stop → launch → primeira tela visivel em <3s
+## Tags: smoke, perf
+##
+## Maestro nao mede tempo real — usar adb logcat externo pra metrica precisa.
+## Este flow usa evalScript pra timestamp coarse-grained.
+appId: net.globalthings.gtone
+tags:
+  - smoke
+  - perf
+---
+- stopApp
+- evalScript:
+    script: |
+      output.startTs = Date.now()
+- launchApp
+- extendedWaitUntil:
+    visible: "GT ONE|Login|Home|Pular"
+    timeout: 3500
+- evalScript:
+    script: |
+      var elapsed = Date.now() - output.startTs;
+      output.elapsed = elapsed;
+      if (elapsed > 3000) throw new Error('Cold start too slow: ' + elapsed + 'ms');
+- takeScreenshot: cold_start_done

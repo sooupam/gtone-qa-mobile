@@ -1,0 +1,42 @@
+## Flow — Checklist Save Partial and Resume
+## Tests: preencher metade → sair → voltar → continuar do ponto
+## Tags: regression, checklist
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - checklist
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Cadastros"
+- tapOn:
+    text: "Checklists"
+- tapOn:
+    id: "checklist-card"
+    index: 0
+
+- tapOn:
+    id: "checklist-item"
+    index: 0
+- tapOn:
+    text: "OK|Conforme"
+
+- tapOn:
+    id: "checklist-item"
+    index: 1
+- tapOn:
+    text: "OK|Conforme"
+
+- back
+
+- assertVisible: "Rascunho salvo|Salvo"
+
+- tapOn:
+    id: "checklist-card"
+    index: 0
+
+- assertVisible: ".*2/.*itens.*"

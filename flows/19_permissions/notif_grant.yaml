@@ -1,0 +1,26 @@
+## Flow — Notification Permission Grant
+## Tests: primeiro login → prompt notif → grant → receber notif teste
+## Tags: regression, permissions
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - permissions
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runScript: ../../scripts/reset_permissions.sh
+- runFlow: ../01_auth/login_happy.yaml
+
+- extendedWaitUntil:
+    visible: "Permitir notificacoes|Allow notifications"
+    timeout: 15000
+
+- tapOn:
+    text: "Permitir|Allow"
+
+- runScript: ../../scripts/send_test_push.sh
+
+- extendedWaitUntil:
+    visible: "Notificacao teste|Test notification"
+    timeout: 15000

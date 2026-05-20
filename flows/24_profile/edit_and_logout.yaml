@@ -1,0 +1,43 @@
+## Flow — Profile Edit and Logout
+## Tests: editar perfil → salvar → logout
+## Tags: regression, profile, auth
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - profile
+  - auth
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Perfil|Profile"
+
+- tapOn:
+    id: "input-profile-name"
+- eraseText
+- inputText: "Test User E2E"
+- hideKeyboard
+
+- tapOn:
+    id: "btn-save-profile"
+
+- extendedWaitUntil:
+    visible: "salvo|saved"
+    timeout: 8000
+
+- back
+- tapOn:
+    id: "btn-logout"
+- tapOn:
+    id: "btn-logout-confirm"
+    optional: true
+
+- extendedWaitUntil:
+    visible:
+      id: "input-email"
+    timeout: 15000

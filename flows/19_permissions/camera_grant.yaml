@@ -1,0 +1,30 @@
+## Flow — Camera Permission Grant
+## Tests: primeira foto → prompt camera → grant → foto OK
+## Tags: regression, permissions
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - permissions
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runScript: ../../scripts/reset_permissions.sh
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    id: "btn-quick-action-photo"
+- tapOn:
+    id: "btn-take-photo"
+
+- extendedWaitUntil:
+    visible: "Permitir|Allow"
+    timeout: 10000
+
+- tapOn:
+    text: "Permitir|Allow|While using|Durante o uso do app"
+
+- extendedWaitUntil:
+    visible:
+      id: "camera-shutter"
+    timeout: 10000

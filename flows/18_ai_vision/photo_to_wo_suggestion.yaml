@@ -1,0 +1,40 @@
+## Flow — AI Vision: Photo to WO Suggestion
+## Tests: AI Vision → foto da galeria → sugestao de OS
+## Tags: regression, ai_vision, ai
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - ai_vision
+  - ai
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    id: "btn-quick-action-photo"
+- extendedWaitUntil:
+    visible: "AI Vision|Analise"
+    timeout: 10000
+
+- tapOn:
+    id: "btn-ai-vision-gallery"
+- tapOn:
+    id: "gallery-item"
+    index: 0
+
+- tapOn:
+    id: "btn-analyze"
+
+- extendedWaitUntil:
+    visible: ".*sugestao.*|.*Criar OS.*"
+    timeout: 45000
+
+- tapOn:
+    id: "btn-create-wo-from-suggestion"
+
+- extendedWaitUntil:
+    visible:
+      id: "input-wo-title"
+    timeout: 10000

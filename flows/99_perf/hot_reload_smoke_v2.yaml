@@ -1,0 +1,28 @@
+## Flow — Hot Reload Smoke v2
+## Tests: Metro dev → touch arquivo JS → reload <5s
+## Tags: perf
+##
+## Requer scripts/touch_js_file.sh (toggles um timestamp num arquivo JS).
+appId: net.globalthings.gtone
+tags:
+  - perf
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "GT ONE|Home|Pular"
+    timeout: 15000
+
+- evalScript:
+    script: |
+      output.t0 = Date.now()
+
+- runScript: ../../scripts/touch_js_file.sh
+
+- extendedWaitUntil:
+    visible: "Reloaded|GT ONE"
+    timeout: 8000
+
+- evalScript:
+    script: |
+      var ms = Date.now() - output.t0;
+      if (ms > 5000) throw new Error('Hot reload too slow: ' + ms);

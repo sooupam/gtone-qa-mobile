@@ -1,0 +1,39 @@
+## Flow — Copilot Attach Photo and Ask
+## Tests: anexar foto da galeria → perguntar IA → resposta
+## Tags: regression, copilot, ai
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - copilot
+  - ai
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Mais"
+- tapOn:
+    text: "Copilot|AI Copilot"
+
+- tapOn:
+    id: "btn-copilot-attach"
+- tapOn:
+    text: "Galeria"
+- tapOn:
+    id: "gallery-item"
+    index: 0
+- tapOn:
+    id: "btn-confirm-photo"
+
+- tapOn:
+    id: "copilot-input"
+- inputText: "O que voce ve nessa imagem?"
+- hideKeyboard
+- tapOn:
+    id: "copilot-send"
+
+- extendedWaitUntil:
+    visible: ".*(vejo|imagem|equipamento).*"
+    timeout: 45000

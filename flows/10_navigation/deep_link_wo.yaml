@@ -1,0 +1,25 @@
+## Flow — Navigation Deep Link to WO
+## Tests: abrir app via gtone://wo/{id} → navegacao direta
+## Tags: critical, navigation
+##
+## Requer env:
+##   MAESTRO_TEST_WO_ID — UUID de uma OS existente no Supabase de teste
+appId: net.globalthings.gtone
+tags:
+  - critical
+  - navigation
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+  WO_ID: ${MAESTRO_TEST_WO_ID}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- openLink: "net.globalthings.gtone://wo/${WO_ID}"
+
+- extendedWaitUntil:
+    visible:
+      id: "wo-detail-header"
+    timeout: 20000
+
+- assertVisible: ${WO_ID}

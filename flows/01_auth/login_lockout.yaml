@@ -1,0 +1,41 @@
+## Flow — Auth Login Lockout
+## Tests: N tentativas erradas → mensagem de bloqueio com tempo restante
+## Tags: critical, auth
+appId: net.globalthings.gtone
+tags:
+  - critical
+  - auth
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  WRONG_PWD: "wrong-password-test"
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    text: "Pular"
+    optional: true
+- extendedWaitUntil:
+    visible:
+      id: "input-email"
+    timeout: 30000
+- repeat:
+    times: 5
+    commands:
+      - tapOn:
+          id: "input-email"
+      - eraseText
+      - inputText: ${EMAIL}
+      - tapOn:
+          id: "input-password"
+      - eraseText
+      - inputText: ${WRONG_PWD}
+      - hideKeyboard
+      - tapOn:
+          id: "btn-login"
+      - extendedWaitUntil:
+          visible: "Invalid login credentials|Credenciais inválidas"
+          timeout: 8000
+- extendedWaitUntil:
+    visible: ".*(bloquead|locked).*minutos.*"
+    timeout: 15000
+- takeScreenshot: lockout_message

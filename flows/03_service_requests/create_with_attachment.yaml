@@ -1,0 +1,43 @@
+## Flow — SR Create with Attachment
+## Tests: criar SR com foto anexada
+## Tags: regression, sr
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - sr
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Solicitacoes"
+- tapOn:
+    id: "fab-create-sr"
+
+- tapOn:
+    id: "input-sr-title"
+    optional: true
+- inputText: "Vazamento na bomba ABC"
+
+- tapOn:
+    id: "input-sr-description"
+    optional: true
+- inputText: "Vazamento severo identificado durante a ronda"
+
+- tapOn:
+    id: "btn-sr-attach"
+- tapOn:
+    id: "gallery-item"
+    index: 0
+- tapOn:
+    id: "btn-confirm-photo"
+
+- hideKeyboard
+- tapOn:
+    id: "btn-save-sr"
+
+- extendedWaitUntil:
+    visible: "criada com sucesso"
+    timeout: 10000

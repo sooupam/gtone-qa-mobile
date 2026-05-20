@@ -1,0 +1,35 @@
+## Flow — Procedure Save Partial and Resume
+## Tests: sair no meio → voltar → continuar
+## Tags: regression, procedures
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - procedures
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "OS"
+- tapOn:
+    id: "wo-card"
+    index: 0
+- tapOn:
+    text: "Procedimento"
+
+- tapOn:
+    id: "procedure-step"
+    index: 0
+- tapOn:
+    id: "btn-step-complete"
+
+- back
+
+- assertVisible: "Rascunho salvo"
+
+- tapOn:
+    text: "Procedimento"
+
+- assertVisible: ".*1/.*steps?.*"

@@ -1,0 +1,43 @@
+## Flow — Offline Edit WO then Sync
+## Tests: desligar net → editar OS → religar → sync OK
+## Tags: regression, offline, sync
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - offline
+  - sync
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- extendedWaitUntil:
+    visible: "Modo direto"
+    timeout: 30000
+
+- tapOn:
+    text: "OS"
+- tapOn:
+    id: "wo-card"
+    index: 0
+
+- runScript: ../../scripts/wifi_off.sh
+
+- tapOn:
+    id: "btn-wo-edit"
+- tapOn:
+    id: "input-wo-description"
+- eraseText
+- inputText: "Editado offline em E2E"
+- hideKeyboard
+- tapOn:
+    id: "btn-wo-save"
+
+- assertVisible: "pendente sync|sync queue"
+
+- runScript: ../../scripts/wifi_on.sh
+
+- extendedWaitUntil:
+    visible: "Sincronizado|Modo direto"
+    timeout: 30000

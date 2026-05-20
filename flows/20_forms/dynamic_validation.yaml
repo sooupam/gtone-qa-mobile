@@ -1,0 +1,39 @@
+## Flow — Forms Dynamic Validation
+## Tests: abrir form → triggar validacao por campo
+## Tags: regression, forms
+appId: net.globalthings.gtone
+tags:
+  - regression
+  - forms
+env:
+  EMAIL: ${MAESTRO_TEST_EMAIL}
+  PASSWORD: ${MAESTRO_TEST_PASSWORD}
+---
+- runFlow: ../01_auth/login_happy.yaml
+
+- tapOn:
+    text: "Cadastros"
+- tapOn:
+    text: "Formularios|Forms"
+
+- tapOn:
+    id: "form-template"
+    index: 0
+
+- tapOn:
+    id: "btn-form-submit"
+
+- assertVisible: ".*obrigatorio.*|.*required.*"
+
+- tapOn:
+    id: "form-field"
+    index: 0
+- inputText: "Valor teste"
+- hideKeyboard
+
+- tapOn:
+    id: "btn-form-submit"
+
+- extendedWaitUntil:
+    visible: "Form salvo|Saved"
+    timeout: 10000
